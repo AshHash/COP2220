@@ -13,13 +13,13 @@
 #define MAXGUESSES 5
 
 //this function provides instructions to the user on how to play the game
-void GameRules(void);
+void LetterGuessGameRules(void);
 
 //runs one game and calls other functions within it
-//uses letter from file as an argument 
+//uses letterFromFile as an argument 
 //gets guess using the GetGuess() function 
 //checks for win using the CompareCharacters() function
-void PlayOneRound(char letter); 
+void PlayOneRound(char letterFromFile); 
 
 //called inside PlayOneRound(); 
 //Prompts player for a guess and returns it
@@ -28,7 +28,7 @@ char GetGuess(void);
 //compares input from the player to the letter from file
 //returns 1 if they match, 0 if they don't
 //gives the user hints based on their guess
-int CompareCharacters(char letter, char guess); 
+int CompareCharacters(char letterFromFile, char guessFromUser); 
 
 
 int main()
@@ -39,7 +39,7 @@ int main()
 											//of letters in file
 	char letter;							//letter from file
 
-	GameRules();							//game rules 
+	LetterGuessGameRules();					//game rules 
 
 	answers = fopen("letters.txt", "r");	//connect to file
 
@@ -65,7 +65,7 @@ int main()
 	return 0;
 }
 
-void GameRules()
+void LetterGuessGameRules()
 {
 	printf("\nWelcome to the Letter Guessing Game\n");
 	printf("\nFirst, you will enter the number of games you want to play (1 - 10 games)\n");
@@ -73,7 +73,7 @@ void GameRules()
 	printf("\nLet's begin:\n\n");
 }
 
-void PlayOneRound(char letter)
+void PlayOneRound(char letterFromFile)
 {
 	int win = 0;
 	int numGuesses = 0;
@@ -81,8 +81,8 @@ void PlayOneRound(char letter)
 	{
         printf("\n----------------------------------------\n");
         printf("\nGetting guess number %d\n", numGuesses+1);
-		char guess = GetGuess();					//sets guess to capitalized user input
-		win = CompareCharacters(letter, guess);		//sets win=1 if characters match	
+		char guessFromUser = GetGuess();							//sets guess to capitalized user input
+		win = CompareCharacters(letterFromFile, guessFromUser);		//sets win=1 if characters match	
 		numGuesses++;
 	}
 	if(win==1)
@@ -91,7 +91,7 @@ void PlayOneRound(char letter)
 	}
 	else											//Apologizes if they lose :(
 	{
-		printf("\nSorry, you didn't win this round.\n\nThe letter was %c\n", letter); 
+		printf("\nSorry, you didn't win this round.\n\nThe letter was %c\n", letterFromFile); 
 	}
 }
 
@@ -104,21 +104,21 @@ char GetGuess()
 	return guess;												//returns guess
 }
 
-int CompareCharacters(char letter, char guess)
+int CompareCharacters(char letterFromFile, char guessFromUser)
 {
-	if(guess<letter)
+	if(guessFromUser<letterFromFile)
 	{
-		printf("\nThe solution comes after your guess (%c)\n", guess);
+		printf("\nThe solution comes after your guess (%c)\n", guessFromUser);
 		return 0;
 	}
-	else if(guess>letter)											//hints for the user if the
+	else if(guessFromUser>letterFromFile)							//hints for the user if the
 	{																//guess doesn't match, returns 0
-		printf("\nThe solution comes before your guess (%c)\n", guess);
+		printf("\nThe solution comes before your guess (%c)\n", guessFromUser);
 		return 0;
 	}
 	else
 	{																//If they match, returns 1
-		printf("\nThe solution and the guess are the same (%c)\n", guess);
+		printf("\nThe solution and the guess are the same (%c)\n", guessFromUser);
 		return 1;
 	}
 }
